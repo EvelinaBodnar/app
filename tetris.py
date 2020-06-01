@@ -323,7 +323,7 @@ class Tetris:
                                             color=colors['berry'])
         self.screen.blit(surface, rect)
         pg.display.update()
-        pg.time.wait(2000)
+        pg.time.wait(1000)
 
     # / ----------------------------------------------------------------------- \
 
@@ -384,7 +384,7 @@ class Tetris:
     # / ----------------------------------------------------------------------- \
 
     def restart_game(self):
-        config.speed = 1
+        config.speed = 3
         shape.restart()
         score.restart()
         self.play()
@@ -392,7 +392,7 @@ class Tetris:
     # / ----------------------------------------------------------------------- \
 
     def home(self):
-        config.speed = 1
+        config.speed = 3
         shape.restart()
         score.restart()
         self.menu()
@@ -611,7 +611,7 @@ class Tetris:
         name = name.replace(' ', '')
         score.save_record(name)
 
-        pg.time.wait(2000)
+        pg.time.wait(1000)
 
     # / ----------------------------------------------------------------------- \
 
