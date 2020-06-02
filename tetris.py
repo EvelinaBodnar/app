@@ -16,9 +16,6 @@ color_effect = ColorEffect(length=15)
 
 
 class Button:
-
-
-
     def __init__(self, key, function, draw_on):
 
         self.key = key
@@ -97,34 +94,7 @@ class Spinner(Button):
 
         Button.__init__(self, key, function, draw_on)
 
-        # Values to put on the spinner
-        if self.key == 'speed':
-            self.current_val = f'{config.speed}'
-            self.vals = list(range(1, 11))
-            self.vals_font_size = config.small_text
 
-        elif self.key == 'ncols':
-            self.current_val = f'{config.ncols}'
-            self.vals = sorted(list(set([i[1] for i in config.grid_sizes])))
-            self.vals_font_size = config.small_text
-
-        elif self.key == 'next shape':
-            self.key = f'Enable next shape'
-            if config.see_next_shape:
-                self.current_val = ' On'
-            else:
-                self.current_val = ' Off'
-            self.vals = ['On', 'Off']
-            self.vals_font_size = int(config.small_text - config.small_text * 0.3)
-
-        elif self.key == 'big shapes':
-            self.key = f'Enable big shapes'
-            if config.big_shapes:
-                self.current_val = ' On'
-            else:
-                self.current_val = ' Off'
-            self.vals = ['On', 'Off']
-            self.vals_font_size = int(config.small_text - config.small_text * 0.3)
 
         self.text = f'{self.key} {self.current_val}'
 
@@ -229,9 +199,6 @@ class Tetris:
 
                           'RANKING': self.ranking,
                           'BACK': self.menu,
-                          'HOME': self.home,
-                          'CONTINUE': self._continue,
-                          'RESTART GAME': self.restart_game,
                           'EXIT': self.exit,
                           }
 
@@ -357,33 +324,6 @@ class Tetris:
 
                     # / ----------------------------------------------------------------------- \
 
-    def level_up(self):
-        pg.time.wait(2000)
-        shape.restart()
-        self.start_count()
-
-    # / ----------------------------------------------------------------------- \
-
-    def _continue(self):
-        shape.restart()
-        score.restart(level=True)
-        self.play()
-
-    # / ----------------------------------------------------------------------- \
-
-    def restart_game(self):
-        config.speed = 3
-        shape.restart()
-        score.restart()
-        self.play()
-
-    # / ----------------------------------------------------------------------- \
-
-    def home(self):
-        config.speed = 3
-        shape.restart()
-        score.restart()
-        self.menu()
 
     def is_losser(self):
         loss = False
@@ -393,7 +333,6 @@ class Tetris:
 
     # / ----------------------------------------------------------------------- \
 
-    # Interactive functions
 
     # / ----------------------------------------------------------------------- \
 
@@ -499,35 +438,6 @@ class Tetris:
 
         # / ----------------------------------------------------------------------- \
 
-    # / ----------------------------------------------------------------------- \
-
-    def restart_continue(self):
-
-        key_buttons = ['HOME', 'CONTINUE', 'RESTART GAME', 'EXIT']
-        buttons = [Button(key, self.functions[key], self.screen) for key in key_buttons]
-
-        self.running = True
-        while self.running:
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.exit()
-
-            self.screen.blit(config.images['MENU BACKGROUND'], (0, 0))
-
-            for button in buttons:
-                button.status()
-                if button.button_on:
-                    self.running = False
-
-            pg.display.update()
-            config.clock.tick(config.fps)
-
-        for button in buttons:
-            if button.button_on:
-                return button
-
-    # / ----------------------------------------------------------------------- \
 
     def write_record(self):
 
@@ -685,10 +595,7 @@ class Tetris:
             if self.is_losser():
                 self.draw_game_over()
                 self.write_record()
-                button = self.restart_continue()
-
-            if score.level_up():
-                self.level_up()
+                button = self.menu()
 
         pg.time.wait(250)
         button()
