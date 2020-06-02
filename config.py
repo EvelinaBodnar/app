@@ -1,12 +1,5 @@
-
-
-# / -------------------------------------------------------------------------- \
-
 import pygame as pg
 from color import colors
-
-
-# / -------------------------------------------------------------------------- \
 
 class Configuration:
 
@@ -26,20 +19,19 @@ class Configuration:
         self.window_w = int(self.reference_w * 0.80)
         self.window_h = int(self.reference_h * 0.90)
 
-        # Background images
+        # Фонові зображення
         self.images = {'MENU BACKGROUND': self.load_image('./Images/menu_background.png'),
-                       'OPTIONS BACKGROUND': self.load_image('./Images/options_background.png'),
                        'RECORDS BACKGROUND': self.load_image('./Images/records_background.png'),
                        'GAME BACKGROUND': self.load_image('./Images/game_background.png'),
                        'INSTRUCTIONS': self.load_image('./Images/instructions.png'),
                        'ICON': self.load_image('./Images/icon.png')}
 
-        # Time settings
+        # Налаштування часу
         self.clock = pg.time.Clock()
-        # Frames per second
+        # Кадри в секунду
         self.fps = 30
 
-        # Grid size (gameboard)
+        # Розмір сітки (ігровий стіл)
         min_ncols = 9
         min_block_size = 24
         max_block_size = 40
@@ -47,14 +39,12 @@ class Configuration:
         self.grid_sizes = [grid_size for grid_size in self.grid_sizes if grid_size[1] >= min_ncols]
         self.nrows, self.ncols, self.block_size, self.game_boundaries = self.grid_sizes[-1]
 
-        # Falling speed
+        # Швидкість падіння
         self.speed = 3
 
-        # Rows to remove to pass level
-        self.removed_rows = 20
+        # Рядки, які потрібно видалити, щоб пройти рівень
 
-
-        # Font sizes
+        # Розміри шрифту
         self.small_text = 18
         self.medium_text = 24
         self.larger_text = 45
@@ -63,27 +53,14 @@ class Configuration:
         self.set_objects_positions()
         self.set_buttons_positions()
 
-        # Enable big shapes
-        self.big_shapes = False
-
-        # Enable display next shape
+        # Увімкнення відображення наступної форми
         self.see_next_shape = True
-
-        # Work later
-        self.sound_on = True
-        self.sounds_files = {'MENU': './sounds/menu.wav',
-                             'PLAYING': './sounds/playing.wav',
-                             'GAME OVER': './sounds/game_over.wav',
-                             'ROTATE': './sounds/rotate.wav',
-                             'MOVE': './sounds/move.wav',
-                             'ERESE': './sounds/erese.wav',
-                             'DROP': './sounds/drop.wav'}
 
     # / ----------------------------------------------------------------------- \
 
     def grid_size(self, block_size=40):
 
-        # Gameboard boundaries
+        # Межі ігрової дошки
         x_proportion = 0.35
         y_proportion = 0.10
 
@@ -111,11 +88,11 @@ class Configuration:
         w = xmax - xmin
         h = ymax - ymin
 
-        # Grid size
+        # Розмір сітки
         ncols = int(w / block_size)
         nrows = int(h / block_size)
 
-        # Ncols must be an odd number
+        # Ncols має бути непарним числом
         if not ncols % 2:
             ncols += 1
             xmin -= int(block_size / 2)
@@ -130,8 +107,8 @@ class Configuration:
 
     def text_objects(self,
                      text='',
-                     x_center=None, y_center=None,  # Center text position or
-                     left=None, top=None,  # Upper left text position
+                     x_center=None, y_center=None,  # Положення тексту в центрі
+                     left=None, top=None,  # верхнє ліве положення тексту
                      rotation_angle=None,
                      color=colors['cherry'],
                      font_size=None,
@@ -145,7 +122,7 @@ class Configuration:
         if window_h is None:
             window_h = self.window_h
 
-        # Scaling the text
+        # Масштабування тексту
         font = pg.font.Font('./font/Purisa.ttf', int(font_size * window_h / self.reference_h))
         text_surface = font.render(text, True, color)
 
@@ -153,11 +130,11 @@ class Configuration:
         text_surface = pg.transform.smoothscale(text_surface, (text_w * window_w // self.reference_w,
                                                                text_h * window_h // self.reference_h))
 
-        # Rotate the text
+        # Повернення тексту
         if rotation_angle is not None:
             text_surface = pg.transform.rotate(text_surface, rotation_angle)
 
-        # Text position
+        # Положення тексту
         text_rect = text_surface.get_rect()
         if x_center is not None and y_center is not None:
             text_rect.center = x_center, y_center
@@ -178,35 +155,21 @@ class Configuration:
         h_button2 = self.window_h / 25.6
         y_space_buttons = self.window_h / 7.5
 
-        # Uppercase is for buttons;
-        # 'x' and 'y' is for the upper left coordinate of the button
+        # Велика літера - для кнопок;
+        # 'x' і 'y' - для верхньої лівої координати кнопки
 
-        # Lowercase is for spinners;
-        # 'x' and 'y' is for the upper left coordinate of the text:  `ncols {current value} [spinner arrow]`
+        # Малі літери призначені для spinners;
+        # 'x' і 'y' - для верхньої лівої координати тексту: `ncols {поточне значення} [стрілка spinner]`
         self.buttons_size = {'START': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                       'y': self.window_h / 3,
+                                       'y': self.window_h / 4,
                                        'w': w_button1,
                                        'h': h_button1},
 
-                             'HOME': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                      'y': self.window_h / 3,
-                                      'w': w_button1,
-                                      'h': h_button1},
-
-                             'CONTINUE': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                          'y': self.window_h / 3 + y_space_buttons,
-                                          'w': w_button1,
-                                          'h': h_button1},
-
                              'RANKING': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                         'y': self.window_h / 3 + y_space_buttons * 2,
+                                         'y': self.window_h / 4 + y_space_buttons,
                                          'w': w_button1,
                                          'h': h_button1},
 
-                             'RESTART GAME': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                              'y': self.window_h / 3 + y_space_buttons * 2,
-                                              'w': w_button1,
-                                              'h': h_button1},
 
                              'BACK': {'x': self.window_w * 0.2 - w_button2 / 2,
                                       'y': self.window_h * 0.1,
@@ -224,7 +187,7 @@ class Configuration:
 
     def set_objects_positions(self):
 
-        # Another objetc to display in the game
+        # Ще один об’єкт для відображення в грі
         self.rects = {'game_boundaries': pg.Rect(self.game_boundaries[0],
                                                  self.game_boundaries[1],
                                                  self.game_boundaries[2] - self.game_boundaries[0],
@@ -236,27 +199,27 @@ class Configuration:
                                             self.block_size * 6)
                       }
 
-        self.texts = {  # X and Y center
+        self.texts = {  # X і Y центр
             'next_shape': {'x': self.rects['next_shape'].center[0],
                            'y': self.rects['next_shape'].top - self.window_h * 0.05},
 
-            # X and Y center
+            # X і Y центр
             'score': {'x': self.rects['next_shape'].center[0],
                       'y': self.rects['next_shape'].bottom + self.window_h * 0.07},
 
-            # X and Y center
+            # X і Y центр
             'speed': {'x': self.rects['next_shape'].center[0],
                       'y': self.rects['next_shape'].bottom + self.window_h * 0.16},
 
-            # X and Y center
+            # X і Y центр
             'start': {'x': self.window_w / 2,
                       'y': self.window_h / 2},
 
-            # X and Y center
+            # X і Y центр
             'write_record': {'x': self.rects['next_shape'].center[0],
                              'y': self.rects['next_shape'].bottom + self.window_h * 0.35},
 
-            # Upper left coordinate
+            # Верхня ліва координата
             'records': {'x': self.window_w / 8,
                         'y': self.window_h * 0.4,
                         'y_space': self.window_h / 10.25},
@@ -264,11 +227,11 @@ class Configuration:
             'top five': {'x': self.window_w / 5,
                          'y': self.window_h * 0.3},
 
-            # X and Y center
+            # X і Y центр
             'game_over': {'x': self.window_w / 2,
                           'y': self.window_h / 2},
 
-            # X and Y center
+            # X і Y центр
             'instructions': {'x': self.window_w / 2,
                              'y': self.window_h - self.window_h * 0.10}
         }
@@ -282,16 +245,13 @@ class Configuration:
         if window_h is None:
             window_h = self.window_h
 
-        # Load and scale the image
+        # Завантаження та масштабування зображення
         img = pg.image.load(filename)
         img = pg.transform.smoothscale(img, (window_w, window_h))
         return img
 
     # / ----------------------------------------------------------------------- \
 
-    def load_sound(self, filename, volume=0.5):
-        self.sound = pg.mixer.Sound(filename)
-        self.sound.set_volume(volume)
 
     # / ----------------------------------------------------------------------- \
 
@@ -302,4 +262,4 @@ config = Configuration()
 # / --------------------------------------------------- \
 # / -------------------------------- \
 # / ------------- \
-# / END
+# / Кінець
