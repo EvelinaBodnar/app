@@ -54,9 +54,13 @@ class Score:
     # / ----------------------------------------------------------------------- \
         
     def save_record(self, id_name):        
-        with open(os.path.join(os.getcwd(), 'records.txt'), 'a') as f:
-            f.write(f'{id_name} {self.score}\n')
-            
+
+        try:
+            with open(os.path.join(os.getcwd(), 'records.txt'), 'a') as f:
+                f.write(f'{id_name} {self.score}\n')
+        except Exception as value:
+            print(f'Error {value}')
+
     # / ----------------------------------------------------------------------- \
 
     def sort_records(self, lines):
