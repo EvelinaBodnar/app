@@ -23,8 +23,7 @@ class Configuration:
         self.images = {'MENU BACKGROUND': self.load_image('./Images/menu_background.png'),
                        'RECORDS BACKGROUND': self.load_image('./Images/records_background.png'),
                        'GAME BACKGROUND': self.load_image('./Images/game_background.png'),
-                       'INSTRUCTIONS': self.load_image('./Images/instructions.png'),
-                       'ICON': self.load_image('./Images/icon.png')}
+                       'INSTRUCTIONS': self.load_image('./Images/instructions.png')}
 
         # Налаштування часу
         self.clock = pg.time.Clock()
@@ -56,7 +55,7 @@ class Configuration:
         self.set_buttons_positions()
 
         # Увімкнення великих форм
-        self.big_shapes = False
+
 
         # Увімкнення відображення наступної форми
         self.see_next_shape = True
