@@ -17,7 +17,7 @@ class Score:
         
         self.score = 0
         self.previous = 0
-        self.threshold_score = self.levels_func()
+
         
     # / ----------------------------------------------------------------------- \
 
@@ -29,7 +29,7 @@ class Score:
         else:            
             self.score = 0
             self.previous = 0
-            self.threshold_score = self.levels_func()
+
             
     # / ----------------------------------------------------------------------- \
 
@@ -67,12 +67,6 @@ class Score:
     def update_score(self, n_eresed):        
         self.score += n_eresed
         
-    # / ----------------------------------------------------------------------- \
-
-    def levels_func(self):
-        self.threshold_score = config.speed * config.removed_rows * config.ncols
-        return self.threshold_score
-
     # / ----------------------------------------------------------------------- \
 
     def previous_score(self):
