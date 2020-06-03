@@ -175,11 +175,6 @@ class Configuration:
                                       'w': w_button1,
                                       'h': h_button1},
 
-                             'CONTINUE': {'x': self.window_w / 4 * 3 - w_button1 / 2,
-                                          'y': self.window_h / 3 + y_space_buttons,
-                                          'w': w_button1,
-                                          'h': h_button1},
-
                              'RANKING': {'x': self.window_w / 4 * 3 - w_button1 / 2,
                                          'y': self.window_h / 4 + y_space_buttons,
                                          'w': w_button1,
@@ -226,9 +221,6 @@ class Configuration:
             'score': {'x': self.rects['next_shape'].center[0],
                       'y': self.rects['next_shape'].bottom + self.window_h * 0.07},
 
-            # X і Y центр
-            'speed': {'x': self.rects['next_shape'].center[0],
-                      'y': self.rects['next_shape'].bottom + self.window_h * 0.16},
 
             # X і Y центр
             'start': {'x': self.window_w / 2,
