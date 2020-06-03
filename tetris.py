@@ -189,7 +189,6 @@ class Tetris:
 
         self.screen = pg.display.set_mode((config.window_w, config.window_h))
         pg.display.set_caption('TETRIS')
-        pg.display.set_icon(config.images['ICON'])
 
 
         self.functions = {pg.K_LEFT: shape.move_left,
@@ -670,4 +669,4 @@ if __name__ == '__main__':
 # / --------------------------------------------------- \
 # / -------------------------------- \
 # / ------------- \
-# / Кінець
+# /Кінець
