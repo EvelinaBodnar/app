@@ -259,17 +259,23 @@ class Shapes:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
-                        diff = self.difference(rect1.top, rect2.bottom, 'bottom')
-                        self.move_shape(0, diff)
-                        self.move = False
-                        return self.move
+                        try:
+                            diff = self.difference(rect1.top, rect2.bottom, 'bottom')
+                            self.move_shape(0, diff)
+                            self.move = False
+                            return self.move
+                        except Exception as value:
+                            print("Щось пішло не так :(")
 
         # Перевірка, чи форма є поза нижньою межею
         diff = self.difference(config.game_boundaries[3], self.shape_corners[3], 'bottom')
         if diff != 0:
-            self.move_shape(0, diff)
-            self.move = False
-            return self.move
+            try:
+                self.move_shape(0, diff)
+                self.move = False
+                return self.move
+            except Exception as value:
+                print("Щось пішло не так :(")
 
         return self.move
         
@@ -282,16 +288,22 @@ class Shapes:
         # Перевірка, чи форма є поза лівою межею
         diff = self.difference(config.game_boundaries[0], self.shape_corners[0], 'left')        
         if diff != 0:
-            self.move_shape(diff, 0)
+            try:
+                self.move_shape(diff, 0)
+            except Exception as value:
+                print("Щось пішло не так :(")
 
         # Перевірка на заповненість
         if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
-                        diff = self.difference(rect1.right, rect2.left,  'left')
-                        self.move_shape(diff, 0)
-                        return None
+                        try:
+                            diff = self.difference(rect1.right, rect2.left,  'left')
+                            self.move_shape(diff, 0)
+                            return None
+                        except Exception as value:
+                            print("Щось пішло не так :(")
                         
     # / ----------------------------------------------------------------------- \
 
@@ -301,16 +313,22 @@ class Shapes:
         self.move_shape(self.pressed_x_speed, 0)        
         diff = self.difference(config.game_boundaries[2], self.shape_corners[2], 'right')
         if diff != 0:
-            self.move_shape(diff, 0)
+            try:
+                self.move_shape(diff, 0)
+            except Exception as value:
+                print("Щось пішло не так :(")
             
         # Перевірка на заповненість
         if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
-                        diff = self.difference(rect1.left, rect2.right, 'right')
-                        self.move_shape(diff, 0)                        
-                        return None
+                        try:
+                            diff = self.difference(rect1.left, rect2.right, 'right')
+                            self.move_shape(diff, 0)
+                            return None
+                        except Exception as value:
+                            print("Щось пішло не так :(")
                         
     # / ----------------------------------------------------------------------- \
 
@@ -333,7 +351,7 @@ class Shapes:
         # Оновлення фігури до нової позиції
         self.get_shape()
 
-        # Перевірка, чи обернена форма є поза= межею
+        # Перевірка, чи обернена форма є поза межею
         diff_left = self.difference(config.game_boundaries[0],  self.shape_corners[0], 'left')
         if diff_left != 0:
             self.move_shape(diff_left, 0)
