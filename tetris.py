@@ -23,7 +23,7 @@ class Button:
 
         self.key = key
 
-        # Button position and dimentions
+        # Положення та розміри кнопки
         self.x = config.buttons_size[self.key]['x']
         self.y = config.buttons_size[self.key]['y']
         self.w = config.buttons_size[self.key]['w']
@@ -36,7 +36,7 @@ class Button:
         self.button_on = False
         self.function = function
 
-        # Draw the button on this surface
+        #  Додавання кнопки на цій поверхні
         self.screen = draw_on
 
         self.draw_params = {'button': self.button,
@@ -81,7 +81,7 @@ class Button:
     # / ----------------------------------------------------------------------- \
 
     def __call__(self):
-        # Run button function if button is turn on
+        # Запустити функцію кнопки, якщо кнопку увімкнено
         if self.button_on:
             self.button_on = False
             self.function()
@@ -97,34 +97,8 @@ class Spinner(Button):
 
         Button.__init__(self, key, function, draw_on)
 
-        # Values to put on the spinner
-        if self.key == 'speed':
-            self.current_val = f'{config.speed}'
-            self.vals = list(range(1, 11))
-            self.vals_font_size = config.small_text
+        # Цінності, які слід поставити на прядильнику
 
-        elif self.key == 'ncols':
-            self.current_val = f'{config.ncols}'
-            self.vals = sorted(list(set([i[1] for i in config.grid_sizes])))
-            self.vals_font_size = config.small_text
-
-        elif self.key == 'next shape':
-            self.key = f'Enable next shape'
-            if config.see_next_shape:
-                self.current_val = ' On'
-            else:
-                self.current_val = ' Off'
-            self.vals = ['On', 'Off']
-            self.vals_font_size = int(config.small_text - config.small_text * 0.3)
-
-        elif self.key == 'big shapes':
-            self.key = f'Enable big shapes'
-            if config.big_shapes:
-                self.current_val = ' On'
-            else:
-                self.current_val = ' Off'
-            self.vals = ['On', 'Off']
-            self.vals_font_size = int(config.small_text - config.small_text * 0.3)
 
         self.text = f'{self.key} {self.current_val}'
 
@@ -149,7 +123,7 @@ class Spinner(Button):
 
     def __call__(self):
 
-        # Display the values of the spinner when the button is turn on
+        # Відображення значення прядильника при включенні кнопки
         if self.button_on:
             pg.time.wait(250)
 
@@ -215,8 +189,8 @@ class Tetris:
 
         self.screen = pg.display.set_mode((config.window_w, config.window_h))
         pg.display.set_caption('TETRIS')
-        pg.display.set_icon(config.images['ICON'])  # This doesn't work on Linux Mint :(
-        # or at least only in my computer
+        pg.display.set_icon(config.images['ICON'])
+
 
         self.functions = {pg.K_LEFT: shape.move_left,
                           pg.K_RIGHT: shape.move_right,
@@ -226,7 +200,6 @@ class Tetris:
                           pg.K_m: self.menu,
                           pg.K_SPACE: self.pause,
                           'START': self.play,
-
                           'RANKING': self.ranking,
                           'BACK': self.menu,
                           'HOME': self.home,
@@ -237,7 +210,7 @@ class Tetris:
         self.running = False
 
     # / ----------------------------------------------------------------------- \
-    # Drawing functions
+    # Функції малювання
     # / ----------------------------------------------------------------------- \
 
     def draw_score(self, color):
@@ -269,13 +242,13 @@ class Tetris:
 
         color = color_effect.change_color()
 
-        # Background
+        # Фон
         self.screen.blit(config.images['GAME BACKGROUND'], (0, 0))
 
-        # Game boundaries
+        # Межі гри
         pg.draw.rect(self.screen, color, config.rects['game_boundaries'], 5)
 
-        # Another objects
+        # Інші об'єкти
         self.draw_next_shape(color)
         self.draw_score(color)
 
@@ -332,7 +305,7 @@ class Tetris:
 
     # / ----------------------------------------------------------------------- \
 
-    # Functions
+    # Функції
 
     # / ----------------------------------------------------------------------- \
 
@@ -388,7 +361,7 @@ class Tetris:
 
     # / ----------------------------------------------------------------------- \
 
-    # Interactive functions
+    # Інтерактивні функції
 
     # / ----------------------------------------------------------------------- \
 
@@ -579,7 +552,7 @@ class Tetris:
                                                 x_center=config.texts['write_record']['x'],
                                                 y_center=config.texts['write_record']['y'],
                                                 color=color)
-            # Draw background
+            # Малювання фону
             pg.draw.rect(self.screen, colors['gray'], rect)
             self.screen.blit(surface, rect)
 
@@ -602,7 +575,7 @@ class Tetris:
         shape.next_shape()
         next_shape.next_shape()
 
-        # Flag to see if user is holding left or right keys
+        # Позначення, чи користувач тримає ліву чи праву клавіші
         left_on = False
         right_on = False
 
@@ -644,8 +617,8 @@ class Tetris:
 
             if not shape.move:
 
-                # If shape can't move down, but the user is
-                # holding left or right keys'
+                # Якщо форма не може рухатися вниз, але користувач є
+                # утримування лівої або правої клавіші
                 if left_on:
                     shape.move_left()
                     left_on = False
@@ -654,12 +627,12 @@ class Tetris:
                     shape.move_right()
                     right_on = False
 
-                # If moved shape can stil move down
+                # Якщо переміщена форма може перейти вниз
                 if shape.move_down():
                     shape.move = True
 
                 else:
-                    # Append shape to dropped shapes
+                    # Додавання форми до скинутих фігур
                     shape.update_filled_spaces()
 
             shape.draw_filled(self.screen)
