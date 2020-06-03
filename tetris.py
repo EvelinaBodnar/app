@@ -682,8 +682,6 @@ class Tetris:
                 self.write_record()
                 button = self.restart_continue()
 
-            if score.level_up():
-                self.level_up()
 
         pg.time.wait(250)
         button()
