@@ -1,5 +1,3 @@
-# / -------------------------------------------------------------------------- \
-
 import os
 import string
 import pygame as pg
@@ -9,7 +7,7 @@ from config import config
 from score import Score
 from color import colors, ColorEffect
 
-# / -------------------------------------------------------------------------- \
+
 
 score = Score()
 shape = Shapes()
@@ -19,7 +17,7 @@ color_effect = ColorEffect(length=15)
 
 class Button:
 
-    # / ----------------------------------------------------------------------- \
+
 
     def __init__(self, key, function, draw_on):
 
@@ -251,17 +249,7 @@ class Tetris:
                                             color=color)
         self.screen.blit(surface, rect)
 
-    # / ----------------------------------------------------------------------- \
 
-    def draw_speed(self, color):
-        text = f'Speed : {config.speed}'
-        surface, rect = config.text_objects(text,
-                                            x_center=config.texts['speed']['x'],
-                                            y_center=config.texts['speed']['y'],
-                                            color=color)
-        self.screen.blit(surface, rect)
-
-    # / ----------------------------------------------------------------------- \
 
     def draw_next_shape(self, color):
         if config.see_next_shape:
@@ -291,7 +279,7 @@ class Tetris:
         # Another objects
         self.draw_next_shape(color)
         self.draw_score(color)
-        self.draw_speed(color)
+
 
     # / ----------------------------------------------------------------------- \
 
@@ -545,7 +533,6 @@ class Tetris:
 
         chars = string.ascii_uppercase
         chars += string.digits
-        chars += '!$&?@^~_'
 
         name = list(f'{chars[-1]}    ')
 
@@ -564,8 +551,8 @@ class Tetris:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_RETURN:
                         count += 1
-                        if count < 3:
-                            name_index += 2
+                        if count < 4:
+                            name_index += 1
                             chars_index = 0
 
                     if event.key == pg.K_BACKSPACE:
@@ -604,7 +591,7 @@ class Tetris:
             pg.display.update()
             config.clock.tick(config.fps)
 
-            if count == 3:
+            if count == 4:
                 self.running = False
 
         name = ''.join(name)
