@@ -44,7 +44,6 @@ class Button:
                             'x_center': self.x_center,
                             'y_center': self.y_center}
 
-    # / ----------------------------------------------------------------------- \
 
     def draw_button(self, color_active=False):
 
@@ -53,18 +52,17 @@ class Button:
             color = color_effect.modify_color(color, l=-20)
 
         draw_params = self.draw_params.copy()
-        if isinstance(draw_params['button'], list):
+        if isinstance(draw_params['button'], list):#Повертає прапор, який вказує на те, чи є зазначений об'єкт екземпляром зазначеного класу
             pg.draw.polygon(self.screen, color, draw_params['button'])
         else:
             pg.draw.rect(self.screen, color, draw_params['button'], 5)
 
         draw_params.pop('button')
-        surface, rect = config.text_objects(**draw_params, color=color)
-        self.screen.blit(surface, rect)
+        surface, rect = config.text_objects(**draw_params, color=color)#для прийняття тільки іменованих аргументів
+        self.screen.blit(surface, rect)#метод blit () застосовується до батьківської Surface, в той час як дочірня приймає в якості аргументу.
 
-        # / ----------------------------------------------------------------------- \
 
-    def status(self):
+    def status(self):# Стутус нажимання на кнопки
 
         pos = pg.mouse.get_pos()
         click = pg.mouse.get_pressed()
@@ -78,7 +76,6 @@ class Button:
 
         return self.button_on
 
-    # / ----------------------------------------------------------------------- \
 
     def __call__(self):
         # Запустити функцію кнопки, якщо кнопку увімкнено
@@ -86,21 +83,15 @@ class Button:
             self.button_on = False
             self.function()
 
-    # / ----------------------------------------------------------------------- \
 
-
-class Spinner(Button):
-
-    # / ----------------------------------------------------------------------- \
+class Spinner(Button):#
 
     def __init__(self, key, function, draw_on):
 
         Button.__init__(self, key, function, draw_on)
 
-        # Цінності, які слід поставити на прядильнику
-
-
-        self.text = f'{self.key} {self.current_val}'
+        # Цінності, які слід поставити на spinner
+        self.text = f'{self.key} {self.current_val}'# рядки покращують читабельність коду, а також працюють швидше ніж інші способи форматування
 
         surface, rect = config.text_objects(self.text,
                                             left=self.x,
@@ -123,23 +114,23 @@ class Spinner(Button):
 
     def __call__(self):
 
-        # Відображення значення прядильника при включенні кнопки
+        # Відображення значення spinner при включенні кнопки
         if self.button_on:
             pg.time.wait(250)
 
             color_text = colors['berry']
             color_text_act = color_effect.modify_color(colors['purple'], l=-50)
 
-            rect_spinner = pg.Rect(self.button_x, self.button_y, self.w, self.h * len(self.vals))
+            rect_spinner = pg.Rect(self.button_x, self.button_y, self.w, self.h * len(self.vals))# Цінність класу полягає у властивостях і методах, що дозволяють управляти розміщенням поверхонь, виконувати перевірку їх перекриття
             cx = self.button_x + self.w / 2
             cy = self.button_y
 
             running = True
             while running:
 
-                pg.event.pump()
-                pos = pg.mouse.get_pos()
-                click = pg.mouse.get_pressed()
+                pg.event.pump()#дозволити pygame обробляти внутрішні дії
+                pos = pg.mouse.get_pos()#отримати позицію курсора миші
+                click = pg.mouse.get_pressed()#отримати стан кнопок миші
 
                 color_rect = color_effect.change_color()
                 pg.draw.rect(self.screen, color_rect, rect_spinner)
@@ -500,7 +491,6 @@ class Tetris:
 
         chars = string.ascii_uppercase
         chars += string.digits
-
         name = list(f'{chars[-1]}    ')
 
         chars_index = 0
