@@ -122,16 +122,16 @@ class ColorEffect:
 
     def modify_color(self, color, h=0, s=0, l=0):
         
-        # If color is in rgb, then convert to hsl
+        # Якщо колір знаходиться в rgb, перетворіть на hsl
         if color[1] > 100 or color[2] > 100:
             color = color.hsla
 
-        # Modify color
+        # Зміна кольору
         h += color[0]
         s += color[1]
         l += color[2]
         
-        # Clip values
+        # Зкріплюючі значення
         h = self.hue_limits(h)
         s = self.clip_sat_light(s)
         l = self.clip_sat_light(l)
@@ -145,4 +145,4 @@ class ColorEffect:
  # / --------------------------------------------------- \
  # / -------------------------------- \
  # / ------------- \
- # / END
+ # / Кінець
