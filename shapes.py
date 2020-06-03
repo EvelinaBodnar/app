@@ -11,7 +11,7 @@ from color import colors, ColorEffect
 
 # / -------------------------------------------------------------------------- \
 
-# Shapes and rotations
+# Форми та обертання
 T = [['000',
       '.0.'],
 
@@ -27,22 +27,6 @@ T = [['000',
       '0.']]
 
 
-TT = [['000',
-       '.0.',
-       '.0.'],
-
-     ['..0',
-      '000',
-      '..0'],
-
-     ['.0.',
-      '.0.',
-      '000',],
-
-     ['0..',
-      '000',
-      '0..']]
-
 
 S1 = [['.00',
        '00.',],
@@ -57,42 +41,6 @@ S2 = [['00.',
 
       ['.0',
        '00',
-       '0.']]
-
-
-Z1 = [['.000',
-       '00..',],
-
-      ['0.',
-       '0.',
-       '00',
-       '.0']]
-
-
-Z2 = [['000.',
-       '..00'],
-
-      ['.0',
-       '.0',
-       '00',
-       '0.']]
-
-
-Z3 = [['..00',
-       '000.',],
-
-      ['0.',
-       '00',
-       '.0',
-       '.0']]
-
-
-Z4 = [['00..',
-       '.000'],
-
-      ['.0',
-       '00',
-       '0.',
        '0.']]
 
 
@@ -137,33 +85,6 @@ I = [['.0.',
       '....']]
 
 
-E = [['00',
-      '.0',
-      '00'],
-
-     ['0.0',
-      '000'],
-      
-     ['00',
-      '0.',
-      '00'],
-
-     ['000',
-      '0.0']]
-
-
-K = [['.0.',
-      '000',
-      '.0.']]
-
-
-O = [['00',
-      '00']]
-
-
-DOT = [['...',
-        '.0.',
-        '...']]
 
 
 dict_shapes = {'T' :   T,
@@ -171,51 +92,24 @@ dict_shapes = {'T' :   T,
                'S2' :  S2, 
                'L1' :  L1,
                'L2' :  L2,
-               'I' :   I,               
-               'O' :   O,
-               'DOT' : DOT}
+               'I' :   I}
 
-dict_big_shapes = {'TT' : TT,
-                   'E' :  E,
-                   'Z1' : Z1,
-                   'Z2' : Z2,
-                   'Z3' : Z3,
-                   'Z4' : Z4,                   
-                   'K' :  K}               
 
 shape_colors = {'T' :   colors['pink'],
-                'TT' :  colors['pink'],
                 'S1' :  colors['purple'],
                 'S2' :  colors['purple'],
-                'Z1' :  colors['orange'],
-                'Z2' :  colors['orange'],                
-                'Z3' :  colors['orange'],
-                'Z4' :  colors['orange'],                                
                 'L1' :  colors['cherry'],
                 'L2' :  colors['cherry'],
                 'I' :   colors['blue'],
-                'E' :   colors['yellow'],
-                'K' :   colors['green'],
-                'O' :   colors['artic'],
-                'DOT' : colors['yellow']}
+}
                 
-# Weights for random choice                                 
+# Вага для випадкового вибору
 weights = {'T' :   0.95,
            'S1' :  0.95,
            'S2' :  0.95,
            'L1' :  0.95,
            'L2' :  0.95,
-           'I' :   0.95,
-           'O' :   0.95,
-           'DOT' : 0.05}
-
-weights_big_shapes = {'TT' : 0.25,
-                      'Z1' : 0.10,
-                      'Z2' : 0.10,
-                      'Z3' : 0.10,
-                      'Z4' : 0.10,                      
-                      'E' :  0.25,
-                      'K' :  0.25}
+           'I' :   0.95}
 
 class Shapes:
     
@@ -223,22 +117,17 @@ class Shapes:
 
     def __init__(self):
 
-        # Dropped blocks
+        #блоки, які випали
         self.dropped = []
         self.dropped_index = []
         self.dropped_colors = []
 
-        # Eresed blocks
+        # Стерті блоки
         self.eresed = []
         self.eresed_colors = []
-        
-        if config.big_shapes:
-            self.dict_shapes = {**dict_shapes, **dict_big_shapes}
-            self.weights = {**weights, **weights_big_shapes}
 
-        else:
-            self.dict_shapes = dict_shapes
-            self.weights = weights
+        self.dict_shapes = dict_shapes
+        self.weights = weights
         
     # / ----------------------------------------------------------------------- \
 
@@ -252,8 +141,8 @@ class Shapes:
         self.eresed_colors = []
 
         if config.big_shapes:
-            self.dict_shapes = {**dict_shapes, **dict_big_shapes}
-            self.weights = {**weights, **weights_big_shapes}
+            self.dict_shapes = {**dict_shapes}
+            self.weights = {**weights}
 
         else:
             self.dict_shapes = dict_shapes
@@ -273,16 +162,16 @@ class Shapes:
             self.position = random.randint(0, self.n_positions-1)
 
         else:
-            # Copy the shape key and position from input Shape instance
+            # Копіювання ключа форми та положення з екземпляра вхідної форми
             self.shape_key = copy(shape.shape_key)
             self.n_positions = copy(shape.n_positions)
             self.position = copy(shape.position)
 
-        # Initial (x, y) position
+        # Початкове (x, y) положення
         self.x =  config.game_boundaries[0] +  (config.ncols // 2  - 1) * config.block_size
         self.y = -(len(self.dict_shapes[self.shape_key][self.position]) * config.block_size)
 
-        # Color
+        # Колір
         self.shape_color = ColorEffect(shape_colors[self.shape_key], interval=45, length=10)
 
         self.get_shape()        
@@ -292,7 +181,7 @@ class Shapes:
                 
     def get_shape(self):
   
-        # self.shape is a list of pg.Rect
+        # self.shape - це список pg.Rect
         self.shape = []
         
         for i, row in enumerate(self.dict_shapes[self.shape_key][self.position]):
@@ -329,7 +218,7 @@ class Shapes:
     # / ----------------------------------------------------------------------- \
 
     def get_index(self, x, y):
-        # Get row and column index when shape can't move down'
+        # Отримання індекса рядків і стовпців, коли форма не може рухатися вниз "
         row = int((y - config.game_boundaries[1]) / config.block_size)
         col = int((x - config.game_boundaries[0]) / config.block_size)
         return row, col    
@@ -367,15 +256,15 @@ class Shapes:
          
         y_move = config.speed + self.pressed_y_speed        
         self.move_shape(0, y_move)
-        
+
         # See if next position is filled:
-        if self.dropped and self.shape_key != 'DOT':
+        if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
                         diff = self.difference(rect1.top, rect2.bottom, 'bottom')
                         self.move_shape(0, diff)
-                        self.move = False                        
+                        self.move = False
                         return self.move
 
         # See if shape is out the bottom boundarie
@@ -397,9 +286,9 @@ class Shapes:
         diff = self.difference(config.game_boundaries[0], self.shape_corners[0], 'left')        
         if diff != 0:
             self.move_shape(diff, 0)
-        
+
         # See if next position is filled:
-        if self.dropped and self.shape_key != 'DOT':
+        if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
@@ -418,7 +307,7 @@ class Shapes:
             self.move_shape(diff, 0)
             
         # See if next position is filled:
-        if self.dropped and self.shape_key != 'DOT':
+        if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
                     if rect1.colliderect(rect2):
@@ -488,7 +377,7 @@ class Shapes:
         n_eresed = 0
 
         # Remove blocks when the row is fiilled
-        if self.dropped and self.shape_key != 'DOT':
+        if self.dropped:
             
             # Get the IDs for the filled rows
             indexes_removed = []
@@ -525,21 +414,9 @@ class Shapes:
 
                 n_eresed = len(self.eresed)
                             
-        if self.shape_key =='DOT' and not self.move:
-             
-             # Remove the blocks by column
-             row, col = self.dropped_index[-1]
-             rows_filled = [i for i, idx in enumerate(self.dropped_index) if idx[1] == col]             
-             indexes = [i for i, idx in enumerate(self.dropped_index) if idx[1] != col]
-             
-             self.eresed = [self.dropped[idx] for idx in rows_filled]
-             self.eresed_colors = [self.dropped_colors[idx] for idx in rows_filled]
 
-             self.dropped = [self.dropped[idx] for idx in indexes]
-             self.dropped_index = [self.dropped_index[idx] for idx in indexes]
-             self.dropped_colors = [self.dropped_colors[idx] for idx in indexes]
 
-             n_eresed = len(self.eresed)
+
 
         return n_eresed
         
