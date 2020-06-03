@@ -140,13 +140,10 @@ class Shapes:
         self.eresed = []
         self.eresed_colors = []
 
-        if config.big_shapes:
-            self.dict_shapes = {**dict_shapes}
-            self.weights = {**weights}
 
-        else:
-            self.dict_shapes = dict_shapes
-            self.weights = weights            
+
+        self.dict_shapes = dict_shapes
+        self.weights = weights
         
     # / ----------------------------------------------------------------------- \
                 
@@ -257,7 +254,7 @@ class Shapes:
         y_move = config.speed + self.pressed_y_speed        
         self.move_shape(0, y_move)
 
-        # See if next position is filled:
+        # Перевірка на заповненість
         if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
@@ -267,7 +264,7 @@ class Shapes:
                         self.move = False
                         return self.move
 
-        # See if shape is out the bottom boundarie
+        # Перевірка, чи форма є поза нижньою межею
         diff = self.difference(config.game_boundaries[3], self.shape_corners[3], 'bottom')
         if diff != 0:
             self.move_shape(0, diff)
@@ -282,12 +279,12 @@ class Shapes:
         
         self.move_shape(-self.pressed_x_speed, 0)
         
-        # See if shape is out of left boundarie
+        # Перевірка, чи форма є поза лівою межею
         diff = self.difference(config.game_boundaries[0], self.shape_corners[0], 'left')        
         if diff != 0:
             self.move_shape(diff, 0)
 
-        # See if next position is filled:
+        # Перевірка на заповненість
         if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
@@ -300,13 +297,13 @@ class Shapes:
 
     def move_right(self):
         
-        # See if shape is out of right boundarie
+        # Перевірка, чи форма є поза правою межею
         self.move_shape(self.pressed_x_speed, 0)        
         diff = self.difference(config.game_boundaries[2], self.shape_corners[2], 'right')
         if diff != 0:
             self.move_shape(diff, 0)
             
-        # See if next position is filled:
+        # Перевірка на заповненість
         if self.dropped:
             for rect1 in self.dropped:
                 for rect2 in self.shape:
@@ -328,15 +325,15 @@ class Shapes:
 
     def rotate(self):
         
-        # Change position
+        # Змінення позиції
         self.position += 1
         if self.position >= self.n_positions:
             self.position = 0
         
-        # Update the shape to the new position
+        # Оновлення фігури до нової позиції
         self.get_shape()
 
-        # If rotated shape is out of bounds
+        # Перевірка, чи обернена форма є поза= межею
         diff_left = self.difference(config.game_boundaries[0],  self.shape_corners[0], 'left')
         if diff_left != 0:
             self.move_shape(diff_left, 0)
@@ -345,7 +342,7 @@ class Shapes:
         if diff_right != 0:
             self.move_shape(diff_right, 0)
 
-        # If rotated shape colaps with any block
+        # Перевірка чи обернена фігура ні з чим не перетинається
         if self.dropped:
             if any(rect1.colliderect(rect2) for rect1 in self.shape for rect2 in self.dropped):
                 self.position -= 1
@@ -363,7 +360,7 @@ class Shapes:
     # / ----------------------------------------------------------------------- \
               
     def update_filled_spaces(self):
-        # Append current shape to the dropped shapes
+        # Додавання поточної форми до викинутих фігур
         for rect in self.shape:
             row, col = self.get_index(rect.left, rect.top)
             self.dropped.append(rect)
@@ -376,10 +373,10 @@ class Shapes:
 
         n_eresed = 0
 
-        # Remove blocks when the row is fiilled
+        # Видалення блоків, коли рядок заповнений
         if self.dropped:
             
-            # Get the IDs for the filled rows
+            # Отримання ід заповнених рядків
             indexes_removed = []
             removed_rows = []
             for row in range(config.nrows)[::-1]:
@@ -390,24 +387,24 @@ class Shapes:
             
             if removed_rows:
                 
-                # Get the blocks that most be removed
+                # Отримання блоків, які найбільше видаляються
                 self.eresed = [self.dropped[i] for i in indexes_removed]
                 self.eresed_colors = [self.dropped_colors[i] for i in indexes_removed]
                 
-                # Remove the blocks
+                # Видалення блоків
                 indexes = [i for i in range(len(self.dropped_index)) if i not in indexes_removed]
                 self.dropped = [self.dropped[i] for i in indexes]
                 self.dropped_index = [self.dropped_index[i] for i in indexes]
                 self.dropped_colors = [self.dropped_colors[i] for i in indexes]
 
-                # See which blocks must be move down
+                # Перегляд, які блоки потрібно рухати вниз
                 to_update = []
                 for i, row in enumerate(removed_rows):
                     for j, rect in enumerate(self.dropped):
                         if self.dropped_index[j][0] < row:
                             to_update.append(j)
 
-                # Move down the blocks
+                # Рух блоків вниз
                 for index in to_update:
                     self.dropped[index] = self.dropped[index].move(0, config.block_size)
                     self.dropped_index[index][0] += 1
@@ -472,4 +469,4 @@ class Shapes:
  # / --------------------------------------------------- \
  # / -------------------------------- \
  # / ------------- \
- # / END
+ # /Кінець
