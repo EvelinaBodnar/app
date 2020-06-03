@@ -230,7 +230,6 @@ class Tetris:
                           'RANKING': self.ranking,
                           'BACK': self.menu,
                           'HOME': self.home,
-                          'CONTINUE': self._continue,
                           'RESTART GAME': self.restart_game,
                           'EXIT': self.exit,
                           }
@@ -357,10 +356,6 @@ class Tetris:
 
                     # / ----------------------------------------------------------------------- \
 
-    def level_up(self):
-        pg.time.wait(2000)
-        shape.restart()
-        self.start_count()
 
     # / ----------------------------------------------------------------------- \
 
@@ -503,7 +498,7 @@ class Tetris:
 
     def restart_continue(self):
 
-        key_buttons = ['HOME', 'CONTINUE', 'RESTART GAME', 'EXIT']
+        key_buttons = ['HOME', 'RESTART GAME']
         buttons = [Button(key, self.functions[key], self.screen) for key in key_buttons]
 
         self.running = True
